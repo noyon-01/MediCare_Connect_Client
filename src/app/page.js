@@ -35,30 +35,38 @@ export default function Home() {
   const user = session?.user;
 
   const [mounted, setMounted] = useState(false);
-  const [stats, setStats] = useState({ doctors: 150, patients: 10000, appointments: 2500, reviews: 800 });
+  const [stats, setStats] = useState({
+    doctors: 150,
+    patients: 10000,
+    appointments: 2500,
+    reviews: 800,
+  });
   const [featuredDoctors, setFeaturedDoctors] = useState([]);
   const [testimonials, setTestimonials] = useState([
     {
       _id: "t1",
-      reviewText: "Dr. Jenkins was extremely professional and explained everything in clear detail. Her diagnosis was spot on.",
+      reviewText:
+        "Dr. Jenkins was extremely professional and explained everything in clear detail. Her diagnosis was spot on.",
       patientName: "John Doe",
       doctorName: "Dr. Sarah Jenkins (Cardiology)",
-      rating: 5
+      rating: 5,
     },
     {
       _id: "t2",
-      reviewText: "Excellent neurological consultation. Highly knowledgeable and caring specialist.",
+      reviewText:
+        "Excellent neurological consultation. Highly knowledgeable and caring specialist.",
       patientName: "Alice Smith",
       doctorName: "Dr. Michael Chang (Neurology)",
-      rating: 5
+      rating: 5,
     },
     {
       _id: "t3",
-      reviewText: "Great experience at the pediatric clinic. Very friendly staff and child-friendly environment.",
+      reviewText:
+        "Great experience at the pediatric clinic. Very friendly staff and child-friendly environment.",
       patientName: "Robert Johnson",
       doctorName: "Dr. Emily Rodriguez (Pediatrics)",
-      rating: 5
-    }
+      rating: 5,
+    },
   ]);
   const [loading, setLoading] = useState(true);
 
@@ -66,28 +74,28 @@ export default function Home() {
     setMounted(true);
     // Fetch statistics
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/stats`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data && !data.error) setStats(data);
       })
       .catch(console.error);
 
     // Fetch featured/top-rated doctors
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors?sortBy=rating&limit=3`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data && data.doctors) setFeaturedDoctors(data.doctors);
       })
       .catch(console.error);
 
     // Fetch testimonials
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews?limit=3`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (Array.isArray(data) && data.length > 0) setTestimonials(data);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setLoading(false);
       });
@@ -207,8 +215,6 @@ export default function Home() {
                   )}
                 </div>
               </div>
-
-
             </motion.div>
           </div>
         </div>
@@ -237,7 +243,10 @@ export default function Home() {
                 </p>
                 <p className="mt-2 text-3xl font-semibold tracking-tight text-gray-900">
                   {typeof value === "number" ? value.toLocaleString() : value}
-                  {typeof value === "number" && value > 0 && label !== "Patient Reviews" && "+"}
+                  {typeof value === "number" &&
+                    value > 0 &&
+                    label !== "Patient Reviews" &&
+                    "+"}
                 </p>
                 <div className="mt-3 inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 text-[10px] text-gray-700">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500" />

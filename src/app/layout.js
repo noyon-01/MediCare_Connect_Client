@@ -37,9 +37,7 @@ export default async function RootLayout({ children }) {
           <JWTSetup />
           <Navbar session={session} />
 
-          <main className="flex-1">
-            {children}
-          </main>
+          <main className="flex-1">{children}</main>
 
           <Footer />
 
