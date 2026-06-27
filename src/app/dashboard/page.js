@@ -17,21 +17,28 @@ export default async function DashboardPage(props) {
 
   let role = session.user.role || "patient";
 
-  if (registerRole && (registerRole === "doctor" || registerRole === "patient") && session.user.role !== registerRole) {
+  if (
+    registerRole &&
+    (registerRole === "doctor" || registerRole === "patient") &&
+    session.user.role !== registerRole
+  ) {
     const client = new MongoClient(process.env.MongoDB_URI);
     try {
       await client.connect();
       const db = client.db("medicareconnect");
       const userDb = db.collection("user");
-      
+
       const newStatus = registerRole === "doctor" ? "pending" : "active";
       await userDb.updateOne(
         { _id: new ObjectId(session.user.id) },
-        { $set: { role: registerRole, status: newStatus } }
+        { $set: { role: registerRole, status: newStatus } },
       );
       role = registerRole;
     } catch (err) {
-      console.error("Failed to update user role during dashboard redirection:", err);
+      console.error(
+        "Failed to update user role during dashboard redirection:",
+        err,
+      );
     } finally {
       await client.close();
     }

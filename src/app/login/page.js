@@ -3,14 +3,18 @@ import { useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import Logo from "@/components/Logo";
+import { useTheme } from "next-themes";
 
 export default function Login() {
+  const { theme } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { data: session } = authClient.useSession();
 
   useEffect(() => {
+    setMounted(true);
     if (session) {
       window.location.href = "/dashboard";
     }
@@ -31,22 +35,64 @@ export default function Login() {
 
   const handleGoogle = async (e) => {
     e.preventDefault();
-    await authClient.signIn.social({ 
+    await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/dashboard"
+      callbackURL: "/dashboard",
     });
   };
 
+  // Theme based classes
+  const bgMain = theme === "dark" ? "bg-slate-950" : "bg-white";
+  const bgLeft = theme === "dark" ? "bg-slate-900" : "bg-gray-50";
+  const borderColor = theme === "dark" ? "border-slate-800" : "border-gray-200";
+  const textPrimary = theme === "dark" ? "text-white" : "text-gray-900";
+  const textSecondary = theme === "dark" ? "text-slate-400" : "text-gray-500";
+  const textMuted = theme === "dark" ? "text-slate-500" : "text-gray-500";
+  const inputBg = theme === "dark" ? "bg-slate-800" : "bg-white";
+  const inputBorder = theme === "dark" ? "border-slate-700" : "border-gray-200";
+  const inputText = theme === "dark" ? "text-white" : "text-gray-900";
+  const inputPlaceholder =
+    theme === "dark"
+      ? "placeholder:text-slate-500"
+      : "placeholder:text-gray-400";
+  const labelColor = theme === "dark" ? "text-slate-400" : "text-gray-500";
+  const statBg =
+    theme === "dark"
+      ? "bg-slate-800 border-slate-700"
+      : "bg-white border-gray-200";
+  const statValue = theme === "dark" ? "text-white" : "text-gray-900";
+  const statLabel = theme === "dark" ? "text-slate-400" : "text-gray-500";
+  const dividerColor =
+    theme === "dark" ? "border-slate-800" : "border-gray-200";
+  const googleBtn =
+    theme === "dark"
+      ? "bg-slate-800 border-slate-700 text-white hover:bg-slate-700"
+      : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50";
+  const linkColor =
+    theme === "dark"
+      ? "text-blue-400 hover:text-blue-300"
+      : "text-blue-600 hover:underline";
+
+  if (!mounted) return null;
+
   return (
-    <div className="min-h-screen w-full flex bg-white">
+    <div
+      className={`min-h-screen w-full flex ${bgMain} transition-colors duration-300`}
+    >
       {/* Left panel: Info & stats */}
-      <div className="hidden lg:flex w-1/2 bg-gray-50 border-r border-gray-200 items-center justify-center p-12 relative overflow-hidden">
+      <div
+        className={`hidden lg:flex w-1/2 ${bgLeft} border-r ${borderColor} items-center justify-center p-12 relative overflow-hidden transition-colors duration-300`}
+      >
         <div className="max-w-md relative z-10">
           <Logo size="lg" />
-          <h2 className="mt-12 text-3xl font-semibold tracking-tight text-gray-900">
+          <h2
+            className={`mt-12 text-3xl font-semibold tracking-tight ${textPrimary} transition-colors duration-300`}
+          >
             Welcome back to a smarter way of caring.
           </h2>
-          <p className="mt-4 text-gray-500 leading-relaxed">
+          <p
+            className={`mt-4 ${textSecondary} leading-relaxed transition-colors duration-300`}
+          >
             Access your appointments, prescriptions, and connect with verified
             specialists — all in one place.
           </p>
@@ -59,12 +105,18 @@ export default function Login() {
             ].map(([v, l]) => (
               <div
                 key={l}
-                className="bg-white border border-gray-200 rounded-xl p-4"
+                className={`${statBg} border rounded-xl p-4 transition-colors duration-300`}
               >
-                <p className="text-2xl font-semibold text-gray-900 tracking-tight">
+                <p
+                  className={`text-2xl font-semibold ${statValue} tracking-tight transition-colors duration-300`}
+                >
                   {v}
                 </p>
-                <p className="text-xs text-gray-500 mt-0.5">{l}</p>
+                <p
+                  className={`text-xs ${statLabel} mt-0.5 transition-colors duration-300`}
+                >
+                  {l}
+                </p>
               </div>
             ))}
           </div>
@@ -72,21 +124,29 @@ export default function Login() {
       </div>
 
       {/* Right panel: Login form */}
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div
+        className={`flex-1 flex items-center justify-center p-6 ${bgMain} transition-colors duration-300`}
+      >
         <form onSubmit={handleLogin} noValidate className="w-full max-w-sm">
           <div className="lg:hidden mb-8">
             <Logo />
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          <h1
+            className={`text-2xl font-semibold tracking-tight ${textPrimary} transition-colors duration-300`}
+          >
             Sign in to your account
           </h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <p
+            className={`mt-1 text-sm ${textSecondary} transition-colors duration-300`}
+          >
             Enter your credentials to access your dashboard.
           </p>
 
           <div className="mt-8 space-y-4">
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1.5">
+              <label
+                className={`block text-xs font-medium ${labelColor} mb-1.5 transition-colors duration-300`}
+              >
                 Email
               </label>
               <input
@@ -96,11 +156,13 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                className={`w-full rounded-lg border ${inputBorder} ${inputBg} px-3.5 py-2.5 text-sm ${inputText} ${inputPlaceholder} focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors duration-300`}
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1.5">
+              <label
+                className={`block text-xs font-medium ${labelColor} mb-1.5 transition-colors duration-300`}
+              >
                 Password
               </label>
               <input
@@ -110,7 +172,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                className={`w-full rounded-lg border ${inputBorder} ${inputBg} px-3.5 py-2.5 text-sm ${inputText} ${inputPlaceholder} focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors duration-300`}
               />
             </div>
 
@@ -124,10 +186,12 @@ export default function Login() {
 
             <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200" />
+                <div className={`w-full border-t ${dividerColor}`} />
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-white px-2 text-xs text-gray-500">
+                <span
+                  className={`${bgMain} px-2 text-xs ${textSecondary} transition-colors duration-300`}
+                >
                   or continue with
                 </span>
               </div>
@@ -136,7 +200,7 @@ export default function Login() {
             <button
               onClick={handleGoogle}
               type="button"
-              className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className={`w-full inline-flex items-center justify-center gap-2 rounded-lg border ${googleBtn} px-4 py-2.5 text-sm font-medium transition-colors`}
             >
               <svg width="16" height="16" viewBox="0 0 24 24">
                 <path
@@ -159,11 +223,13 @@ export default function Login() {
               Continue with Google
             </button>
 
-            <p className="text-center text-xs text-gray-500 mt-6">
+            <p
+              className={`text-center text-xs ${textSecondary} mt-6 transition-colors duration-300`}
+            >
               Don't have an account?{" "}
               <a
                 href="/register"
-                className="text-blue-600 font-medium hover:underline"
+                className={`${linkColor} font-medium transition-colors`}
               >
                 Create one
               </a>

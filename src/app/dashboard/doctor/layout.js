@@ -25,14 +25,14 @@ export default async function DoctorDashboardLayout({ children }) {
   try {
     await client.connect();
     const db = client.db("medicareconnect");
-    
+
     let userIdQuery = session.user.id;
     let userObjectId = null;
     try {
       userObjectId = new ObjectId(session.user.id);
     } catch (e) {}
 
-    const query = userObjectId 
+    const query = userObjectId
       ? { $or: [{ userId: session.user.id }, { userId: userObjectId }] }
       : { userId: session.user.id };
 
@@ -41,7 +41,10 @@ export default async function DoctorDashboardLayout({ children }) {
       status = profile.verificationStatus || "pending";
     }
   } catch (err) {
-    console.error("DoctorDashboardLayout verification status check failed:", err);
+    console.error(
+      "DoctorDashboardLayout verification status check failed:",
+      err,
+    );
   } finally {
     await client.close();
   }
@@ -57,10 +60,14 @@ export default async function DoctorDashboardLayout({ children }) {
                 <Clock className="w-8 h-8 animate-pulse" />
               </div>
               <div className="space-y-2">
-                <h2 className="text-xl font-bold text-gray-900">Awaiting Verification</h2>
+                <h2 className="text-xl font-bold text-gray-900">
+                  Awaiting Verification
+                </h2>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  Your professional profile has been submitted and is currently pending verification by site administrators. 
-                  Once verified, you will gain full access to your scheduling and dashboard tools.
+                  Your professional profile has been submitted and is currently
+                  pending verification by site administrators. Once verified,
+                  you will gain full access to your scheduling and dashboard
+                  tools.
                 </p>
               </div>
             </>
@@ -70,16 +77,19 @@ export default async function DoctorDashboardLayout({ children }) {
                 <XCircle className="w-8 h-8" />
               </div>
               <div className="space-y-2">
-                <h2 className="text-xl font-bold text-gray-900">Verification Rejected</h2>
+                <h2 className="text-xl font-bold text-gray-900">
+                  Verification Rejected
+                </h2>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  Your professional verification has been rejected or revoked by the site administrator. 
-                  If you believe this is an error or need to update your credentials, please contact support.
+                  Your professional verification has been rejected or revoked by
+                  the site administrator. If you believe this is an error or
+                  need to update your credentials, please contact support.
                 </p>
               </div>
             </>
           )}
           <div className="pt-2">
-            <Link 
+            <Link
               href="/"
               className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors w-full"
             >
