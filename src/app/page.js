@@ -295,118 +295,135 @@ export default function Home() {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="space-y-4"
+              className="space-y-5"
             >
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl">
-                <div className="flex items-center justify-between mb-5">
+              {/* Main Card - Premium Glassmorphism */}
+              <div className="relative bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-2xl border border-white/15 rounded-3xl p-6 shadow-2xl shadow-black/20 overflow-hidden">
+                {/* Decorative Glow */}
+                <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-full blur-3xl"></div>
+                <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-tr from-emerald-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
+
+                {/* Header */}
+                <div className="relative z-10 flex items-center justify-between mb-6">
                   <div>
-                    <p className="text-xs text-white/50 font-medium uppercase tracking-wider">
+                    <p className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em]">
                       Quick Access
                     </p>
-                    <h3 className="text-lg font-semibold text-white mt-0.5">
+                    <h3 className="text-lg font-bold text-white mt-0.5 tracking-tight">
                       What would you like to do?
                     </h3>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-500/20 rounded-full px-3 py-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-[10px] text-emerald-400 font-medium">
-                      Live
+                  <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3 py-1.5">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                     </span>
-                  </span>
+                    <span className="text-[9px] text-white/50 font-medium tracking-wider">
+                      LIVE
+                    </span>
+                  </div>
                 </div>
 
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const q = new FormData(e.target).get("q");
-                    window.location.href = `/doctors?search=${encodeURIComponent(q || "")}`;
-                  }}
-                  className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus-within:border-white/30 transition-colors"
-                >
-                  <Search className="w-4 h-4 text-white/40" />
-                  <input
-                    name="q"
-                    placeholder="Search doctors, specialties..."
-                    className="flex-1 bg-transparent text-sm text-white placeholder-white/40 outline-none"
-                  />
-                  <button
-                    type="submit"
-                    className="text-xs font-semibold text-white/60 hover:text-white transition-colors"
-                  >
-                    Search
-                  </button>
-                </form>
-
-                <div className="mt-5 grid grid-cols-3 gap-2">
+                {/* Specialties Grid - Premium Design */}
+                <div className="relative z-10 mt-6 grid grid-cols-3 gap-2.5">
                   {SPECIALIZATIONS.slice(0, 6).map(
                     ({ icon: Icon, label, color, bg }) => (
                       <motion.a
                         key={label}
                         href={`/doctors?specialization=${encodeURIComponent(label)}`}
-                        whileHover={{ y: -2, scale: 1.02 }}
+                        whileHover={{ y: -4, scale: 1.03 }}
                         whileTap={{ scale: 0.95 }}
-                        className="group bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-3 text-center transition-all duration-300"
+                        className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-2xl p-4 text-center transition-all duration-300 overflow-hidden"
                       >
+                        {/* Hover Glow */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-transparent group-hover:from-cyan-500/10 group-hover:to-blue-500/5 transition-all duration-500"></div>
+
                         <div
-                          className={`w-8 h-8 mx-auto rounded-full ${bg} flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform`}
+                          className={`relative z-10 w-10 h-10 mx-auto rounded-xl ${bg} flex items-center justify-center mb-2 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300`}
                         >
                           <Icon className={`w-4 h-4 ${color}`} />
                         </div>
-                        <p className="text-[10px] text-white/70 truncate group-hover:text-white transition-colors">
+                        <p className="relative z-10 text-[10px] text-white/70 font-medium truncate group-hover:text-white transition-colors">
                           {label}
                         </p>
+
+                        {/* Bottom Accent Line */}
+                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-400 group-hover:w-1/2 transition-all duration-500"></div>
                       </motion.a>
                     ),
                   )}
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+                {/* Footer Actions */}
+                <div className="relative z-10 mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
                   <a
                     href="/doctors"
-                    className="text-xs text-white/50 hover:text-white transition-colors flex items-center gap-1"
+                    className="group text-xs text-white/40 hover:text-white transition-colors flex items-center gap-1.5 font-medium"
                   >
                     View all specialties
-                    <ChevronRight className="w-3 h-3" />
+                    <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                   </a>
                   <a
                     href={user ? "/dashboard" : "/register"}
-                    className="inline-flex items-center gap-1.5 bg-gradient-to-r from-blue-500 to-emerald-500 text-white text-xs font-medium px-4 py-2 rounded-full hover:shadow-lg transition-all duration-300"
+                    className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white text-xs font-semibold px-5 py-2.5 rounded-full shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 group"
                   >
-                    {user ? "Dashboard" : "Get Started"}
-                    <ArrowRight className="w-3 h-3" />
+                    <span>{user ? "Dashboard" : "Get Started"}</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                   </a>
                 </div>
               </div>
 
+              {/* Stats Grid - Premium Redesign */}
               <div className="grid grid-cols-3 gap-3">
                 {[
                   {
                     icon: Users,
                     label: "Doctors",
                     value: stats.doctors || 150,
+                    color: "from-cyan-500/20 to-blue-500/20",
+                    iconColor: "text-cyan-400",
                   },
                   {
                     icon: Calendar,
                     label: "Appointments",
                     value: stats.appointments || 2500,
+                    color: "from-emerald-500/20 to-teal-500/20",
+                    iconColor: "text-emerald-400",
                   },
-                  { icon: Star, label: "Reviews", value: stats.reviews || 800 },
+                  {
+                    icon: Star,
+                    label: "Reviews",
+                    value: stats.reviews || 800,
+                    color: "from-amber-500/20 to-orange-500/20",
+                    iconColor: "text-amber-400",
+                  },
                 ].map((item, i) => (
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 + i * 0.1 }}
-                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-3 text-center"
+                    className="group relative bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 rounded-2xl p-4 text-center transition-all duration-300 overflow-hidden"
                   >
-                    <item.icon className="w-4 h-4 text-white/40 mx-auto" />
-                    <p className="text-lg font-bold text-white mt-1">
-                      {typeof item.value === "number"
-                        ? item.value.toLocaleString()
-                        : item.value}
-                      +
-                    </p>
-                    <p className="text-[10px] text-white/40">{item.label}</p>
+                    {/* Hover Glow */}
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+                    ></div>
+
+                    <div className="relative z-10">
+                      <item.icon
+                        className={`w-4 h-4 ${item.iconColor} mx-auto group-hover:scale-110 transition-transform duration-300`}
+                      />
+                      <p className="text-xl font-bold text-white mt-1.5 tracking-tight">
+                        {typeof item.value === "number"
+                          ? item.value.toLocaleString()
+                          : item.value}
+                        <span className="text-sm text-white/30">+</span>
+                      </p>
+                      <p className="text-[10px] text-white/40 font-medium group-hover:text-white/60 transition-colors">
+                        {item.label}
+                      </p>
+                    </div>
                   </motion.div>
                 ))}
               </div>
