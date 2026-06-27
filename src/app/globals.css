@@ -1,0 +1,152 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@layer base {
+  input, textarea, select, button {
+    outline: none !important;
+  }
+  input:focus, textarea:focus, select:focus, button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Hide header and footer when in dashboard */
+body:has(.in-dashboard) header,
+body:has(.in-dashboard) footer {
+  display: none !important;
+}
+
+/* Premium Dark Mode Global Style Overrides */
+[data-theme="dark"] {
+  /* Core layout dark background override */
+  &, body, main {
+    background-color: #0b0f19 !important; /* rich deep navy slate */
+    color: #f3f4f6 !important; /* gray-100 */
+  }
+
+  /* Text colors overrides */
+  .text-gray-900 {
+    color: #f9fafb !important; /* white/gray-50 */
+  }
+  .text-gray-800 {
+    color: #f3f4f6 !important;
+  }
+  .text-gray-700 {
+    color: #e5e7eb !important; /* gray-200 */
+  }
+  .text-gray-600 {
+    color: #d1d5db !important; /* gray-300 */
+  }
+  .text-gray-500 {
+    color: #9ca3af !important; /* gray-400 */
+  }
+  .text-gray-400 {
+    color: #6b7280 !important; /* gray-500 */
+  }
+
+  /* Card and container backgrounds overrides */
+  .bg-white {
+    background-color: #111827 !important; /* slate-900 for card/sidebar containers */
+    color: #f3f4f6 !important;
+  }
+  .bg-gray-50 {
+    background-color: #0f172a !important; /* slate-950/900 for secondary backgrounds */
+  }
+  .bg-gray-100 {
+    background-color: #1f2937 !important;
+  }
+
+  /* Borders overrides */
+  .border-gray-200 {
+    border-color: #1f2937 !important; /* dark gray border */
+  }
+  .border-gray-100 {
+    border-color: #111827 !important;
+  }
+  .divide-gray-200 > * + * {
+    border-color: #1f2937 !important;
+  }
+  .divide-gray-100 > * + * {
+    border-color: #111827 !important;
+  }
+
+  /* Hover states overrides */
+  .hover\:bg-gray-50:hover {
+    background-color: #1f2937 !important;
+  }
+  .hover\:bg-gray-100:hover {
+    background-color: #374151 !important;
+  }
+
+  /* Forms & Input fields overrides */
+  input, textarea, select {
+    background-color: #1f2937 !important;
+    color: #f3f4f6 !important;
+    border-color: #374151 !important;
+  }
+  input::placeholder, textarea::placeholder {
+    color: #6b7280 !important;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: #3b82f6 !important;
+  }
+
+  /* Header/Navbar transparent glass backdrop */
+  header.bg-white\/95 {
+    background-color: rgba(11, 15, 25, 0.95) !important;
+    border-color: #1f2937 !important;
+  }
+
+  /* Subtle status badges overrides */
+  .bg-blue-50 {
+    background-color: rgba(59, 130, 246, 0.15) !important;
+    color: #60a5fa !important;
+  }
+  .text-blue-600 {
+    color: #60a5fa !important;
+  }
+  .bg-green-50 {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    color: #34d399 !important;
+  }
+  .text-green-600 {
+    color: #34d399 !important;
+  }
+  .bg-orange-50 {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+    color: #fbbf24 !important;
+  }
+  .text-orange-600 {
+    color: #fbbf24 !important;
+  }
+  .bg-red-50 {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    color: #f87171 !important;
+  }
+  .text-red-600 {
+    color: #f87171 !important;
+  }
+
+  /* Icons overrides */
+  .text-blue-500 {
+    color: #60a5fa !important;
+  }
+
+  /* Dropdown card bg override */
+  .absolute.bg-white {
+    background-color: #111827 !important;
+    border-color: #1f2937 !important;
+  }
+
+  /* Dashboard active item override */
+  .bg-blue-50.text-blue-600 {
+    background-color: rgba(59, 130, 246, 0.2) !important;
+    color: #60a5fa !important;
+  }
+
+  /* Payments receipts and other light background structures */
+  .bg-gray-50\/50 {
+    background-color: rgba(15, 23, 42, 0.5) !important;
+  }
+}
