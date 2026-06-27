@@ -531,10 +531,10 @@
 
 
 
-
 "use client";
 import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useTheme } from "next-themes";
 import {
   Heart,
   Brain,
@@ -566,17 +566,18 @@ import DoctorCard from "@/components/DoctorCard";
 import { authClient } from "@/lib/auth-client";
 
 const SPECIALIZATIONS = [
-  { icon: Heart, label: "Cardiology", color: "text-rose-500", bg: "bg-rose-50" },
-  { icon: Brain, label: "Neurology", color: "text-indigo-500", bg: "bg-indigo-50" },
-  { icon: Bone, label: "Orthopedics", color: "text-amber-500", bg: "bg-amber-50" },
-  { icon: Baby, label: "Pediatrics", color: "text-pink-500", bg: "bg-pink-50" },
-  { icon: Stethoscope, label: "General Medicine", color: "text-emerald-500", bg: "bg-emerald-50" },
-  { icon: Eye, label: "Ophthalmology", color: "text-cyan-500", bg: "bg-cyan-50" },
+  { icon: Heart, label: "Cardiology", color: "text-rose-500", bg: "bg-rose-50 dark:bg-rose-950/30" },
+  { icon: Brain, label: "Neurology", color: "text-indigo-500", bg: "bg-indigo-50 dark:bg-indigo-950/30" },
+  { icon: Bone, label: "Orthopedics", color: "text-amber-500", bg: "bg-amber-50 dark:bg-amber-950/30" },
+  { icon: Baby, label: "Pediatrics", color: "text-pink-500", bg: "bg-pink-50 dark:bg-pink-950/30" },
+  { icon: Stethoscope, label: "General Medicine", color: "text-emerald-500", bg: "bg-emerald-50 dark:bg-emerald-950/30" },
+  { icon: Eye, label: "Ophthalmology", color: "text-cyan-500", bg: "bg-cyan-50 dark:bg-cyan-950/30" },
 ];
 
 export default function Home() {
   const { data: session } = authClient.useSession();
   const user = session?.user;
+  const { theme, setTheme } = useTheme();
 
   const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState({
@@ -645,31 +646,28 @@ export default function Home() {
       });
   }, []);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
+  // Hero background based on theme
+  const heroBg = theme === 'dark' 
+    ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+    : 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900';
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-  };
+  // Section backgrounds
+  const sectionBg = theme === 'dark' ? 'bg-slate-950' : 'bg-white';
+  const sectionAltBg = theme === 'dark' ? 'bg-slate-900' : 'bg-slate-50';
+  const cardBg = theme === 'dark' ? 'bg-slate-900/50' : 'bg-white';
+  const cardAltBg = theme === 'dark' ? 'bg-slate-800/50' : 'bg-slate-50';
+  const borderColor = theme === 'dark' ? 'border-slate-800' : 'border-slate-200';
+  const textColor = theme === 'dark' ? 'text-slate-300' : 'text-slate-500';
+  const headingColor = theme === 'dark' ? 'text-white' : 'text-slate-900';
+
+  if (!mounted) return null;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className={`min-h-screen ${sectionBg} transition-colors duration-300`}>
       {/* ===== HERO SECTION ===== */}
       <motion.section
         style={{ opacity: heroOpacity }}
-        className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
+        className={`relative min-h-[90vh] flex items-center overflow-hidden ${heroBg}`}
       >
         {/* Animated Background Patterns */}
         <div className="absolute inset-0 opacity-30">
@@ -687,7 +685,6 @@ export default function Home() {
               transition={{ duration: 0.7, ease: "easeOut" }}
               className="space-y-6"
             >
-              {/* Badge */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -785,14 +782,13 @@ export default function Home() {
               </motion.div>
             </motion.div>
 
-            {/* Right Content - Quick Actions */}
+            {/* Right Content */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
               className="space-y-4"
             >
-              {/* Main Card */}
               <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl">
                 <div className="flex items-center justify-between mb-5">
                   <div>
@@ -809,7 +805,6 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* Quick Search */}
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -832,7 +827,6 @@ export default function Home() {
                   </button>
                 </form>
 
-                {/* Specializations Grid */}
                 <div className="mt-5 grid grid-cols-3 gap-2">
                   {SPECIALIZATIONS.slice(0, 6).map(({ icon: Icon, label, color, bg }) => (
                     <motion.a
@@ -867,7 +861,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Quick Stats */}
               <div className="grid grid-cols-3 gap-3">
                 {[
                   { icon: Users, label: "Doctors", value: stats.doctors || 150 },
@@ -895,7 +888,7 @@ export default function Home() {
       </motion.section>
 
       {/* ===== SPECIALIZATIONS SECTION ===== */}
-      <section className="py-20 bg-white">
+      <section className={`py-20 ${sectionBg}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -903,14 +896,14 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-14"
           >
-            <span className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 rounded-full px-4 py-1.5 text-xs font-medium mb-4">
+            <span className={`inline-flex items-center gap-2 ${theme === 'dark' ? 'bg-blue-950/50 text-blue-400' : 'bg-blue-50 text-blue-600'} rounded-full px-4 py-1.5 text-xs font-medium mb-4`}>
               <Stethoscope className="w-3 h-3" />
               Our Specialties
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
+            <h2 className={`text-3xl sm:text-4xl font-bold ${headingColor}`}>
               Expert Care in Every Specialty
             </h2>
-            <p className="text-lg text-slate-500 mt-3">
+            <p className={`text-lg ${textColor} mt-3`}>
               From routine check-ups to complex procedures, we've got you covered.
             </p>
           </motion.div>
@@ -925,13 +918,13 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.06 }}
                 whileHover={{ y: -6, scale: 1.02 }}
-                className="group bg-slate-50 hover:bg-white rounded-2xl p-6 text-center transition-all duration-300 border-2 border-transparent hover:border-blue-100 hover:shadow-xl"
+                className={`group ${theme === 'dark' ? 'bg-slate-900/50 hover:bg-slate-800/50 hover:border-slate-700' : 'bg-slate-50 hover:bg-white hover:border-blue-100'} rounded-2xl p-6 text-center transition-all duration-300 border-2 border-transparent hover:shadow-xl`}
               >
                 <div className={`w-14 h-14 mx-auto rounded-2xl ${bg} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300`}>
                   <Icon className={`w-6 h-6 ${color}`} />
                 </div>
-                <p className="text-sm font-semibold text-slate-900">{label}</p>
-                <p className="text-xs text-slate-400 mt-0.5">View doctors</p>
+                <p className={`text-sm font-semibold ${headingColor}`}>{label}</p>
+                <p className={`text-xs ${textColor} mt-0.5`}>View doctors</p>
               </motion.a>
             ))}
           </div>
@@ -939,7 +932,7 @@ export default function Home() {
       </section>
 
       {/* ===== STATS SECTION ===== */}
-      <section className="py-16 bg-slate-50">
+      <section className={`py-16 ${sectionAltBg}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
@@ -954,14 +947,14 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
-                className="bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100"
+                className={`${cardBg} rounded-2xl p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border ${borderColor}`}
               >
                 <span className="text-3xl">{emoji}</span>
-                <p className="text-3xl font-bold text-slate-900 mt-2">
+                <p className={`text-3xl font-bold ${headingColor} mt-2`}>
                   {typeof value === "number" ? value.toLocaleString() : value}+
                 </p>
-                <p className="text-sm font-medium text-slate-700">{label}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{sub}</p>
+                <p className={`text-sm font-medium ${headingColor}`}>{label}</p>
+                <p className={`text-xs ${textColor} mt-0.5`}>{sub}</p>
               </motion.div>
             ))}
           </div>
@@ -969,7 +962,7 @@ export default function Home() {
       </section>
 
       {/* ===== FEATURED DOCTORS ===== */}
-      <section className="py-20 bg-white">
+      <section className={`py-20 ${sectionBg}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -978,20 +971,20 @@ export default function Home() {
             className="flex items-end justify-between mb-12"
           >
             <div>
-              <span className="inline-flex items-center gap-2 bg-amber-50 text-amber-600 rounded-full px-4 py-1.5 text-xs font-medium mb-3">
+              <span className={`inline-flex items-center gap-2 ${theme === 'dark' ? 'bg-amber-950/50 text-amber-400' : 'bg-amber-50 text-amber-600'} rounded-full px-4 py-1.5 text-xs font-medium mb-3`}>
                 <Award className="w-3 h-3" />
                 Top Rated
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
+              <h2 className={`text-3xl sm:text-4xl font-bold ${headingColor}`}>
                 Meet Our Expert Doctors
               </h2>
-              <p className="text-lg text-slate-500 mt-1">
+              <p className={`text-lg ${textColor} mt-1`}>
                 Trusted by thousands for their expertise and care.
               </p>
             </div>
             <a
               href="/doctors"
-              className="hidden sm:inline-flex items-center gap-2 text-blue-600 font-semibold hover:text-blue-700 transition-colors group"
+              className="hidden sm:inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition-colors group"
             >
               View All
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -1014,12 +1007,12 @@ export default function Home() {
               Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="bg-slate-50 rounded-2xl p-6 h-64 animate-pulse"
+                  className={`${cardAltBg} rounded-2xl p-6 h-64 animate-pulse`}
                 />
               ))}
             {!loading && featuredDoctors.length === 0 && (
-              <div className="col-span-3 text-center py-12 bg-slate-50 rounded-2xl">
-                <p className="text-slate-500">No doctors found yet.</p>
+              <div className={`col-span-3 text-center py-12 ${cardAltBg} rounded-2xl`}>
+                <p className={textColor}>No doctors found yet.</p>
               </div>
             )}
           </div>
@@ -1027,7 +1020,7 @@ export default function Home() {
       </section>
 
       {/* ===== WHY CHOOSE US ===== */}
-      <section className="py-20 bg-slate-50">
+      <section className={`py-20 ${sectionAltBg}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -1035,14 +1028,14 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-14"
           >
-            <span className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-600 rounded-full px-4 py-1.5 text-xs font-medium mb-4">
+            <span className={`inline-flex items-center gap-2 ${theme === 'dark' ? 'bg-emerald-950/50 text-emerald-400' : 'bg-emerald-50 text-emerald-600'} rounded-full px-4 py-1.5 text-xs font-medium mb-4`}>
               <Shield className="w-3 h-3" />
               Why Choose Us
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
+            <h2 className={`text-3xl sm:text-4xl font-bold ${headingColor}`}>
               Healthcare That Puts You First
             </h2>
-            <p className="text-lg text-slate-500 mt-3">
+            <p className={`text-lg ${textColor} mt-3`}>
               We're redefining healthcare with technology, trust, and compassion.
             </p>
           </motion.div>
@@ -1075,10 +1068,10 @@ export default function Home() {
               },
             ].map(({ icon: Icon, title, desc, color }, i) => {
               const colors = {
-                blue: "bg-blue-50 text-blue-600",
-                emerald: "bg-emerald-50 text-emerald-600",
-                purple: "bg-purple-50 text-purple-600",
-                rose: "bg-rose-50 text-rose-600",
+                blue: `${theme === 'dark' ? 'bg-blue-950/50 text-blue-400' : 'bg-blue-50 text-blue-600'}`,
+                emerald: `${theme === 'dark' ? 'bg-emerald-950/50 text-emerald-400' : 'bg-emerald-50 text-emerald-600'}`,
+                purple: `${theme === 'dark' ? 'bg-purple-950/50 text-purple-400' : 'bg-purple-50 text-purple-600'}`,
+                rose: `${theme === 'dark' ? 'bg-rose-950/50 text-rose-400' : 'bg-rose-50 text-rose-600'}`,
               };
               return (
                 <motion.div
@@ -1087,13 +1080,13 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08 }}
-                  className="bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 group"
+                  className={`${cardBg} rounded-2xl p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border ${borderColor} group`}
                 >
                   <div className={`w-14 h-14 mx-auto rounded-2xl ${colors[color]} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                     <Icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900">{title}</h3>
-                  <p className="text-sm text-slate-500 mt-2 leading-relaxed">{desc}</p>
+                  <h3 className={`text-lg font-bold ${headingColor}`}>{title}</h3>
+                  <p className={`text-sm ${textColor} mt-2 leading-relaxed`}>{desc}</p>
                 </motion.div>
               );
             })}
@@ -1102,7 +1095,7 @@ export default function Home() {
       </section>
 
       {/* ===== TESTIMONIALS ===== */}
-      <section className="py-20 bg-white">
+      <section className={`py-20 ${sectionBg}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -1110,14 +1103,14 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-14"
           >
-            <span className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 rounded-full px-4 py-1.5 text-xs font-medium mb-4">
+            <span className={`inline-flex items-center gap-2 ${theme === 'dark' ? 'bg-indigo-950/50 text-indigo-400' : 'bg-indigo-50 text-indigo-600'} rounded-full px-4 py-1.5 text-xs font-medium mb-4`}>
               <Quote className="w-3 h-3" />
               Patient Stories
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
+            <h2 className={`text-3xl sm:text-4xl font-bold ${headingColor}`}>
               Real Stories from Real Patients
             </h2>
-            <p className="text-lg text-slate-500 mt-3">
+            <p className={`text-lg ${textColor} mt-3`}>
               Hear what our patients have to say about their experience.
             </p>
           </motion.div>
@@ -1130,35 +1123,35 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
-                className="bg-slate-50 rounded-2xl p-6 hover:bg-white hover:shadow-xl transition-all duration-300 border border-slate-100 hover:border-slate-200"
+                className={`${cardAltBg} rounded-2xl p-6 hover:${cardBg} hover:shadow-xl transition-all duration-300 border ${borderColor} hover:border-slate-200 dark:hover:border-slate-700`}
               >
                 <div className="flex items-center gap-1 mb-3">
                   {Array.from({ length: 5 }).map((_, idx) => (
                     <Star
                       key={idx}
-                      className={`w-4 h-4 ${idx < t.rating ? "fill-amber-400 text-amber-400" : "text-slate-200"}`}
+                      className={`w-4 h-4 ${idx < t.rating ? "fill-amber-400 text-amber-400" : "text-slate-200 dark:text-slate-700"}`}
                     />
                   ))}
                 </div>
-                <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">
+                <p className={`text-sm ${textColor} leading-relaxed line-clamp-3`}>
                   "{t.reviewText}"
                 </p>
-                <div className="mt-4 pt-4 border-t border-slate-200 flex items-center gap-3">
+                <div className={`mt-4 pt-4 border-t ${borderColor} flex items-center gap-3`}>
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-white text-sm font-bold flex items-center justify-center">
                     {(t.patientName || "P")[0]}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-slate-900">
+                    <p className={`text-sm font-semibold ${headingColor}`}>
                       {t.patientName || "Patient"}
                     </p>
-                    <p className="text-xs text-slate-400">{t.doctorName}</p>
+                    <p className={`text-xs ${textColor}`}>{t.doctorName}</p>
                   </div>
                 </div>
               </motion.div>
             ))}
             {testimonials.length === 0 && !loading && (
-              <div className="col-span-3 text-center py-12 bg-slate-50 rounded-2xl">
-                <p className="text-slate-500">No reviews yet.</p>
+              <div className={`col-span-3 text-center py-12 ${cardAltBg} rounded-2xl`}>
+                <p className={textColor}>No reviews yet.</p>
               </div>
             )}
           </div>
@@ -1166,7 +1159,7 @@ export default function Home() {
       </section>
 
       {/* ===== CTA SECTION ===== */}
-      <section className="py-20 bg-slate-900">
+      <section className="py-20 bg-slate-900 dark:bg-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
