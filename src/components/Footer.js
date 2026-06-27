@@ -1,8 +1,4 @@
-import {
-  Phone,
-  Mail,
-  MapPin,
-} from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import { FaTwitter, FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import Logo from "./Logo";
 
@@ -18,15 +14,17 @@ export default function Footer() {
               hospitals through one intelligent platform.
             </p>
             <div className="flex gap-2 pt-2">
-              {[FaTwitter, FaFacebook, FaInstagram, FaLinkedin].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="w-8 h-8 inline-flex items-center justify-center rounded-full border border-gray-200 hover:border-gray-300 text-gray-500 hover:text-gray-900 transition-colors"
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                </a>
-              ))}
+              {[FaTwitter, FaFacebook, FaInstagram, FaLinkedin].map(
+                (Icon, i) => (
+                  <a
+                    key={i}
+                    href="#"
+                    className="w-8 h-8 inline-flex items-center justify-center rounded-full border border-gray-200 hover:border-gray-300 text-gray-500 hover:text-gray-900 transition-colors"
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                  </a>
+                ),
+              )}
             </div>
           </div>
 
@@ -92,7 +90,9 @@ export default function Footer() {
                 <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
                 24/7 Available
               </div>
-              <p className="text-xs text-gray-500 mb-1">Call us anytime (911)</p>
+              <p className="text-xs text-gray-500 mb-1">
+                Call us anytime (911)
+              </p>
               <a
                 href="tel:1-800-MEDICARE"
                 className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors"
